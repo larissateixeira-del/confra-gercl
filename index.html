@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Confraternização GERCL</title>
+<meta name="description" content="Vote no formato, data e região da confraternização da equipe GERCL.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#062a33; --bg2:#0a4650; --card:#0d3a45; --fg:#eef6f7; --muted:#9bbcc2; --line:#23606c;
+  --accent:#f2a24d; --accent-fg:#2a1604; --teal:#4fc3cc; --ok:#7be0a8; --err:#ff8f80;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"DM Sans","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.5;
+  background-image:radial-gradient(900px 500px at 85% -10%,rgba(79,195,204,.22),transparent 60%),radial-gradient(700px 500px at -10% 10%,rgba(242,162,77,.18),transparent 60%);
+  background-attachment:fixed}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px 64px}
+/* hero */
+.hero{padding:56px 0 28px;text-align:center;position:relative}
+.eyebrow{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 14px}
+.hero h1{font-family:var(--display);font-weight:800;line-height:.95;margin:18px 0 14px;font-size:clamp(2.4rem,11vw,4.4rem);letter-spacing:-.01em}
+.hero h1 span{display:block;color:var(--accent);font-size:1.45em}
+.hero p{margin:0 auto;max-width:46ch;color:var(--muted);font-size:1.05rem}
+.dots{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.hero>*:not(.dots){position:relative}
+.dots i{position:absolute;border-radius:50%;opacity:.55;animation:fl 7s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-14px)}}
+/* form */
+form{display:flex;flex-direction:column;gap:18px;margin-top:8px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.q h2{font-family:var(--display);font-size:1.15rem;margin:0 0 4px;line-height:1.25}
+.q .h{color:var(--muted);font-size:.9rem;margin:0 0 14px}
+.q.err{border-color:var(--err)}
+.msgerr{color:var(--err);font-size:.88rem;margin:10px 0 0;display:none}
+.q.err .msgerr{display:block}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{padding:0}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.grid.sm{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.opt{position:relative;display:block;cursor:pointer;min-width:0}
+.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opt span{display:flex;align-items:center;gap:10px;min-height:52px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03);transition:.15s;font-weight:500}
+.opt span::before{content:"";flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--muted);transition:.15s}
+.opt.ck span::before{border-radius:5px}
+.opt input:checked+span{border-color:var(--accent);background:rgba(242,162,77,.14)}
+.opt input:checked+span::before{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px var(--bg)}
+.opt.ck input:checked+span::before{box-shadow:none;background:var(--accent) center/12px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.5l2.5 2.5L10 3' fill='none' stroke='%232a1604' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.opt input:focus-visible+span{outline:2px solid var(--teal);outline-offset:2px}
+.opt:hover span{border-color:var(--teal)}
+input[type=text],textarea{width:100%;font:inherit;color:var(--fg);background:rgba(255,255,255,.05);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px}
+input[type=text]::placeholder,textarea::placeholder{color:#6f969d}
+input[type=text]:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:transparent}
+textarea{min-height:96px;resize:vertical}
+.step{display:flex;align-items:center;gap:16px}
+.step button{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--fg);font-size:1.5rem;cursor:pointer}
+.step button:hover{border-color:var(--accent)}
+.step output{font-family:var(--display);font-size:1.8rem;font-weight:800;min-width:2ch;text-align:center}
+.step small{color:var(--muted)}
+.go{font:inherit;font-family:var(--display);font-weight:800;font-size:1.15rem;background:var(--accent);color:var(--accent-fg);border:0;border-radius:14px;padding:18px;cursor:pointer;transition:.15s}
+.go:hover{filter:brightness(1.08)}
+.go:disabled{opacity:.6;cursor:default}
+.go:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.status{text-align:center;min-height:1.4em;color:var(--err);font-size:.95rem}
+/* sucesso */
+.done{display:none;text-align:center;padding:48px 20px;background:var(--card);border:1px solid var(--line);border-radius:16px;margin-top:24px}
+.done h2{font-family:var(--display);font-size:2rem;margin:0 0 8px}
+.done p{color:var(--muted);margin:0 auto 20px;max-width:40ch}
+.done .ok{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;background:var(--ok);color:#06301c;display:grid;place-items:center;font-size:2rem;font-weight:700}
+.done button{font:inherit;background:transparent;color:var(--fg);border:1.5px solid var(--line);border-radius:10px;padding:10px 18px;cursor:pointer}
+footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:32px}
+@media (prefers-reduced-motion:reduce){.dots i{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="dots" id="dots" aria-hidden="true"></div>
+  <span class="eyebrow">Equipe GERCL</span>
+  <h1>Confraternização<span>GERCL</span></h1>
+  <p>Vamos escolher juntos formato, data e região. Responda abaixo, leva menos de um minuto.<span id="prazo"></span></p>
+</header>
+
+<form id="f" novalidate>
+
+  <div class="q" id="q-nome">
+    <h2><label for="nome">Seu nome</label></h2>
+    <input type="text" id="nome" maxlength="60" autocomplete="name" placeholder="Nome e sobrenome">
+    <p class="msgerr">Informe seu nome.</p>
+  </div>
+
+  <div class="q" id="q-part">
+    <fieldset>
+      <legend><h2>Você pretende participar?</h2></legend>
+      <div class="grid sm" data-name="part" data-type="radio" data-opts="Sim, com certeza|Provavelmente|Não consigo"></div>
+    </fieldset>
+    <p class="msgerr">Escolha uma opção.</p>
+  </div>
+
+  <div class="q" id="q-formato">
+    <fieldset>
+      <legend><h2>Qual formato você prefere?</h2></legend>
+      <p class="h">Pode marcar mais de um.</p>
+      <div class="grid" data-name="formato" data-type="checkbox" data-opts="Almoço em bar ou restaurante|Churrasco em espaço de eventos|Happy hour à noite"></div>
+    </fieldset>
+    <p class="msgerr">Marque pelo menos um formato.</p>
+  </div>
+
+  <div class="q" id="q-datas">
+    <fieldset>
+      <legend><h2>Em quais sábados você consegue?</h2></legend>
+      <p class="h">Marque todos que servem para você.</p>
+      <div class="grid sm" data-name="datas" data-type="checkbox" data-opts="Sábado 07/11|Sábado 14/11|Sábado 21/11|Sábado 28/11"></div>
+    </fieldset>
+    <p class="msgerr">Marque pelo menos uma data.</p>
+  </div>
+
+  <div class="q" id="q-regiao">
+    <fieldset>
+      <legend><h2>Qual região de São Paulo fica melhor?</h2></legend>
+      <p class="h">Pode marcar mais de uma.</p>
+      <div class="grid sm" data-name="regiao" data-type="checkbox" data-opts="Zona Sul|Zona Oeste|Zona Norte|Zona Leste|Centro|Indiferente"></div>
+    </fieldset>
+    <p class="msgerr">Marque pelo menos uma região.</p>
+  </div>
+
+  <div class="q" id="q-valor">
+    <fieldset>
+      <legend><h2>Quanto você topa pagar por pessoa?</h2></legend>
+      <div class="grid sm" data-name="valor" data-type="radio" data-opts="Até R$ 60|R$ 60 a R$ 100|R$ 100 a R$ 150|Acima de R$ 150"></div>
+    </fieldset>
+    <p class="msgerr">Escolha uma faixa.</p>
+  </div>
+
+  <div class="q" id="q-conv">
+    <h2>Quantas pessoas vão com você?</h2>
+    <p class="h">Acompanhante ou filhos. Deixe em 0 se for sozinho.</p>
+    <div class="step">
+      <button type="button" id="menos" aria-label="Diminuir">−</button>
+      <output id="conv" aria-live="polite">0</output>
+      <button type="button" id="mais" aria-label="Aumentar">+</button>
+      <small>além de você</small>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><label for="rest">Restrição alimentar</label></h2>
+    <p class="h">Opcional. Vegetariano, intolerância, alergia.</p>
+    <input type="text" id="rest" maxlength="120">
+  </div>
+
+  <div class="q">
+    <fieldset>
+      <legend><h2>Prefere um lugar com bebida alcoólica?</h2></legend>
+      <p class="h">Opcional.</p>
+      <div class="grid sm" data-name="alcool" data-type="radio" data-opts="Sim|Indiferente|Prefiro sem álcool"></div>
+    </fieldset>
+  </div>
+
+  <div class="q">
+    <h2><label for="obs">Sugestão de local ou recado</label></h2>
+    <p class="h">Opcional. Conhece um lugar bom? Conta aqui.</p>
+    <textarea id="obs" maxlength="400"></textarea>
+  </div>
+
+  <button class="go" id="btn" type="submit">Enviar minha resposta</button>
+  <div class="status" id="status" role="status"></div>
+</form>
+
+<div class="done" id="done" tabindex="-1">
+  <div class="ok" aria-hidden="true">✓</div>
+  <h2>Resposta enviada!</h2>
+  <p>Obrigado, <b id="who"></b>. Quando a gente fechar data e local, avisamos no grupo.</p>
+  <button type="button" id="again">Responder de novo</button>
+</div>
+
+<footer>Equipe GERCL</footer>
+</div>
+
+<script>
+/* ===== CONFIGURAÇÃO ===== */
+// Cole aqui o endereço do app da web do Google Apps Script (veja COMO PUBLICAR.txt)
+var URL_ENVIO = "https://script.google.com/a/macros/sulamerica.com.br/s/AKfycbw3JeTUtx3pMghrg4btvwIpszqG_kpU6nIWbI5cbGfCCWrjLRlB83F44ri_2MklS0Ed4g/exec";
+// Texto opcional de prazo, por exemplo: " Responda até 10/10."
+var PRAZO = "";
+/* ======================== */
+
+var $ = function(id){return document.getElementById(id)};
+$("prazo").textContent = PRAZO;
+
+// opções
+document.querySelectorAll(".grid[data-opts]").forEach(function(g){
+  var n=g.dataset.name, t=g.dataset.type;
+  g.innerHTML = g.dataset.opts.split("|").map(function(o){
+    return '<label class="opt'+(t==="checkbox"?" ck":"")+'"><input type="'+t+'" name="'+n+'" value="'+o+'"><span>'+o+'</span></label>';
+  }).join("");
+});
+
+// confete de fundo
+(function(){
+  var c=["#f2a24d","#ffd678","#4fc3cc","#ffffff"], h="";
+  for(var i=0;i<22;i++){
+    var s=6+Math.random()*12;
+    h+='<i style="left:'+(Math.random()*100)+'%;top:'+(Math.random()*90)+'%;width:'+s+'px;height:'+s+'px;background:'+c[i%4]+';animation-delay:-'+(Math.random()*7)+'s"></i>';
+  }
+  $("dots").innerHTML=h;
+})();
+
+// contador
+var conv=0;
+function setConv(v){conv=Math.max(0,Math.min(10,v));$("conv").textContent=conv}
+$("menos").onclick=function(){setConv(conv-1)};
+$("mais").onclick=function(){setConv(conv+1)};
+
+function vals(n){return Array.prototype.map.call(document.querySelectorAll('input[name="'+n+'"]:checked'),function(i){return i.value})}
+
+function validar(){
+  var regras=[["q-nome",$("nome").value.trim().length>0],["q-part",vals("part").length>0],["q-formato",vals("formato").length>0],
+    ["q-datas",vals("datas").length>0],["q-regiao",vals("regiao").length>0],["q-valor",vals("valor").length>0]];
+  var primeiro=null;
+  regras.forEach(function(r){
+    var el=$(r[0]); el.classList.toggle("err",!r[1]);
+    if(!r[1]&&!primeiro)primeiro=el;
+  });
+  if(primeiro)primeiro.scrollIntoView({behavior:"smooth",block:"center"});
+  return !primeiro;
+}
+document.querySelectorAll(".q").forEach(function(q){
+  q.addEventListener("input",function(){q.classList.remove("err")});
+});
+
+$("f").addEventListener("submit",function(e){
+  e.preventDefault();
+  var st=$("status"); st.textContent="";
+  if(!validar()){st.textContent="Faltam algumas respostas, marcadas em vermelho.";return}
+  if(!URL_ENVIO){st.textContent="Página ainda sem endereço de envio. Siga o passo 5 do COMO PUBLICAR.txt.";return}
+  var dados={nome:$("nome").value.trim(),participa:vals("part")[0],formato:vals("formato").join("; "),datas:vals("datas").join("; "),
+    regiao:vals("regiao").join("; "),valor:vals("valor")[0],convidados:conv,restricao:$("rest").value.trim(),
+    alcool:vals("alcool")[0]||"",comentario:$("obs").value.trim()};
+  var b=$("btn"); b.disabled=true; b.textContent="Enviando...";
+  fetch(URL_ENVIO,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(dados)})
+  .then(function(){
+    $("who").textContent=dados.nome.split(" ")[0];
+    $("f").style.display="none"; $("done").style.display="block"; $("done").focus();
+    window.scrollTo({top:0,behavior:"smooth"});
+  })
+  .catch(function(){st.textContent="Não foi possível enviar. Confira a internet e tente de novo."})
+  .then(function(){b.disabled=false;b.textContent="Enviar minha resposta"});
+});
+
+$("again").onclick=function(){
+  $("f").reset(); setConv(0);
+  $("done").style.display="none"; $("f").style.display="flex";
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+</script>
+</body>
+</html>
