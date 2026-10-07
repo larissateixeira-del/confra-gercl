@@ -57,7 +57,7 @@ input[type=text],textarea{width:100%;font:inherit;color:var(--fg);background:rgb
 input[type=text]::placeholder,textarea::placeholder{color:#6f969d}
 input[type=text]:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:transparent}
 textarea{min-height:96px;resize:vertical}
-.step{display:flex;align-items:center;gap:16px}
+.stepx{display:flex;align-items:center;gap:16px}
 .step button{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--fg);font-size:1.5rem;cursor:pointer}
 .step button:hover{border-color:var(--accent)}
 .step output{font-family:var(--display);font-size:1.8rem;font-weight:800;min-width:2ch;text-align:center}
@@ -84,7 +84,7 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:32px}
   <div class="dots" id="dots" aria-hidden="true"></div>
   <span class="eyebrow">Equipe GERCL</span>
   <h1>Confraternização<span>GERCL</span></h1>
-  <p>Vamos escolher juntos formato, data e região. Responda abaixo, leva menos de um minuto.<span id="prazo"></span></p>
+  <p>Será num sábado, durante o dia. Vamos escolher juntos formato e data. Responda abaixo, leva menos de um minuto.<span id="prazo"></span></p>
 </header>
 
 <form id="f" novalidate>
@@ -107,7 +107,7 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:32px}
     <fieldset>
       <legend><h2>Qual formato você prefere?</h2></legend>
       <p class="h">Pode marcar mais de um.</p>
-      <div class="grid" data-name="formato" data-type="checkbox" data-opts="Almoço em bar ou restaurante|Churrasco em espaço de eventos|Happy hour à noite"></div>
+      <div class="grid" data-name="formato" data-type="checkbox" data-opts="Almoço com música ao vivo em restaurante ou bar|Churrasco em espaço de eventos, particular ou alugado|Boliche, gastronomia e drinks|Karaokê com petiscos e bebidas"></div>
     </fieldset>
     <p class="msgerr">Marque pelo menos um formato.</p>
   </div>
@@ -116,37 +116,17 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:32px}
     <fieldset>
       <legend><h2>Em quais sábados você consegue?</h2></legend>
       <p class="h">Marque todos que servem para você.</p>
-      <div class="grid sm" data-name="datas" data-type="checkbox" data-opts="Sábado 07/11|Sábado 14/11|Sábado 21/11|Sábado 28/11"></div>
+      <div class="grid sm" data-name="datas" data-type="checkbox" data-opts="Sábado 14/11|Sábado 21/11|Sábado 28/11|Sábado 05/12"></div>
     </fieldset>
     <p class="msgerr">Marque pelo menos uma data.</p>
-  </div>
-
-  <div class="q" id="q-regiao">
-    <fieldset>
-      <legend><h2>Qual região de São Paulo fica melhor?</h2></legend>
-      <p class="h">Pode marcar mais de uma.</p>
-      <div class="grid sm" data-name="regiao" data-type="checkbox" data-opts="Zona Sul|Zona Oeste|Zona Norte|Zona Leste|Centro|Indiferente"></div>
-    </fieldset>
-    <p class="msgerr">Marque pelo menos uma região.</p>
   </div>
 
   <div class="q" id="q-valor">
     <fieldset>
       <legend><h2>Quanto você topa pagar por pessoa?</h2></legend>
-      <div class="grid sm" data-name="valor" data-type="radio" data-opts="Até R$ 60|R$ 60 a R$ 100|R$ 100 a R$ 150|Acima de R$ 150"></div>
+      <div class="grid sm" data-name="valor" data-type="radio" data-opts="R$ 60 a R$ 100|R$ 100 a R$ 150|Acima de R$ 150"></div>
     </fieldset>
     <p class="msgerr">Escolha uma faixa.</p>
-  </div>
-
-  <div class="q" id="q-conv">
-    <h2>Quantas pessoas vão com você?</h2>
-    <p class="h">Acompanhante ou filhos. Deixe em 0 se for sozinho.</p>
-    <div class="step">
-      <button type="button" id="menos" aria-label="Diminuir">−</button>
-      <output id="conv" aria-live="polite">0</output>
-      <button type="button" id="mais" aria-label="Aumentar">+</button>
-      <small>além de você</small>
-    </div>
   </div>
 
   <div class="q">
@@ -186,7 +166,7 @@ footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:32px}
 <script>
 /* ===== CONFIGURAÇÃO ===== */
 // Cole aqui o endereço do app da web do Google Apps Script (veja COMO PUBLICAR.txt)
-var URL_ENVIO = "https://script.google.com/a/macros/sulamerica.com.br/s/AKfycbw3JeTUtx3pMghrg4btvwIpszqG_kpU6nIWbI5cbGfCCWrjLRlB83F44ri_2MklS0Ed4g/exec";
+var URL_ENVIO = "https://script.google.com/a/macros/sulamerica.com.br/s/AKfycbweGeAlju_4fezeyNt9qB5_R3c24QaTHuzz9Ff2r_y7i6WjCI792LHUHrRVvfwObEoh0A/exec";
 // Texto opcional de prazo, por exemplo: " Responda até 10/10."
 var PRAZO = "";
 /* ======================== */
@@ -212,17 +192,11 @@ document.querySelectorAll(".grid[data-opts]").forEach(function(g){
   $("dots").innerHTML=h;
 })();
 
-// contador
-var conv=0;
-function setConv(v){conv=Math.max(0,Math.min(10,v));$("conv").textContent=conv}
-$("menos").onclick=function(){setConv(conv-1)};
-$("mais").onclick=function(){setConv(conv+1)};
-
 function vals(n){return Array.prototype.map.call(document.querySelectorAll('input[name="'+n+'"]:checked'),function(i){return i.value})}
 
 function validar(){
   var regras=[["q-nome",$("nome").value.trim().length>0],["q-part",vals("part").length>0],["q-formato",vals("formato").length>0],
-    ["q-datas",vals("datas").length>0],["q-regiao",vals("regiao").length>0],["q-valor",vals("valor").length>0]];
+    ["q-datas",vals("datas").length>0],["q-valor",vals("valor").length>0]];
   var primeiro=null;
   regras.forEach(function(r){
     var el=$(r[0]); el.classList.toggle("err",!r[1]);
@@ -241,7 +215,7 @@ $("f").addEventListener("submit",function(e){
   if(!validar()){st.textContent="Faltam algumas respostas, marcadas em vermelho.";return}
   if(!URL_ENVIO){st.textContent="Página ainda sem endereço de envio. Siga o passo 5 do COMO PUBLICAR.txt.";return}
   var dados={nome:$("nome").value.trim(),participa:vals("part")[0],formato:vals("formato").join("; "),datas:vals("datas").join("; "),
-    regiao:vals("regiao").join("; "),valor:vals("valor")[0],convidados:conv,restricao:$("rest").value.trim(),
+    valor:vals("valor")[0],restricao:$("rest").value.trim(),
     alcool:vals("alcool")[0]||"",comentario:$("obs").value.trim()};
   var b=$("btn"); b.disabled=true; b.textContent="Enviando...";
   fetch(URL_ENVIO,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(dados)})
@@ -255,7 +229,7 @@ $("f").addEventListener("submit",function(e){
 });
 
 $("again").onclick=function(){
-  $("f").reset(); setConv(0);
+  $("f").reset();
   $("done").style.display="none"; $("f").style.display="flex";
   window.scrollTo({top:0,behavior:"smooth"});
 };
